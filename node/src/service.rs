@@ -6,8 +6,8 @@ pub use sc_executor::NativeExecutor;
 
 use std::sync::Arc;
 use sc_consensus_babe;
-use appchain_barnacle_runtime::opaque::Block;
-use appchain_barnacle_runtime::RuntimeApi;
+use easydeal_runtime::opaque::Block;
+use easydeal_runtime::RuntimeApi;
 use sc_service::{
 	config::Configuration, error::Error as ServiceError, RpcHandlers, TaskManager,
 };
@@ -24,8 +24,8 @@ use beefy_primitives::ecdsa::AuthoritySignature as BeefySignature;
 // Our native executor instance.
 native_executor_instance!(
 	pub Executor,
-	appchain_barnacle_runtime::api::dispatch,
-	appchain_barnacle_runtime::native_version,
+	easydeal_runtime::api::dispatch,
+	easydeal_runtime::native_version,
 	frame_benchmarking::benchmarking::HostFunctions,
 );
 

@@ -1,5 +1,5 @@
 use sp_core::{Pair, Public, sr25519};
-use appchain_barnacle_runtime::{
+use easydeal_runtime::{
 	AccountId, BabeConfig, BalancesConfig, GenesisConfig, GrandpaConfig,
 	SudoConfig, SystemConfig, WASM_BINARY, Signature
 };
@@ -9,7 +9,7 @@ use sc_service::ChainType;
 
 use sp_consensus_babe::{AuthorityId as BabeId};
 use pallet_im_online::sr25519::{AuthorityId as ImOnlineId};
-use appchain_barnacle_runtime::{
+use easydeal_runtime::{
 	ImOnlineConfig, SessionConfig, opaque::SessionKeys,
 	StakingConfig, Balance, DOLLARS, BeefyConfig,
 	OctopusAppchainConfig,
@@ -217,7 +217,7 @@ fn testnet_genesis(
 		},
 		pallet_babe: BabeConfig {
 			authorities: vec![],
-			epoch_config: Some(appchain_barnacle_runtime::BABE_GENESIS_EPOCH_CONFIG),
+			epoch_config: Some(easydeal_runtime::BABE_GENESIS_EPOCH_CONFIG),
 		},
 		pallet_grandpa: GrandpaConfig {
 			authorities: vec![],

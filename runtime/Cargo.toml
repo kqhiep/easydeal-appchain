@@ -1,10 +1,10 @@
 [package]
-authors = ['Octopus Network <hi@oct.network>']
+authors = ['Easydeal <flex@easydeal.io>']
 edition = '2018'
-homepage = 'https://oct.network'
+homepage = 'https://easydeal.io'
 license = 'Apache-2.0'
-name = 'appchain-barnacle-runtime'
-repository = 'https://github.com/octopus-network/barnacle'
+name = 'easydeal-runtime'
+repository = 'https://github.com/easydeal-io'
 version = '3.0.0'
 
 [package.metadata.docs.rs]

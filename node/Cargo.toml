@@ -1,16 +1,16 @@
 [package]
-authors = ['Octopus Network <hi@oct.network>']
+authors = ['Easydeal <flex@easydeal.io>']
 build = 'build.rs'
-description = 'A minimal template for octopus appchain.'
+description = 'A decentralized classified information platform.'
 edition = '2018'
-homepage = 'https://oct.network/'
+homepage = 'https://easydeal.io/'
 license = 'Apache-2.0'
-name = 'appchain-barnacle'
-repository = 'https://github.com/octopus-network/barnacle/'
+name = 'easydeal'
+repository = 'https://github.com/easydeal-io/'
 version = '3.0.0'
 
 [[bin]]
-name = 'appchain-barnacle'
+name = 'easydeal'
 
 [package.metadata.docs.rs]
 targets = ['x86_64-unknown-linux-gnu']
@@ -52,7 +52,7 @@ sp-transaction-pool = {version = '3.0.0', git = 'https://github.com/paritytech/s
 substrate-frame-rpc-system = {version = '3.0.0', git = 'https://github.com/paritytech/substrate.git', tag = 'monthly-2021-05'}
 
 # local dependencies
-appchain-barnacle-runtime = {version = '3.0.0', path = '../runtime'}
+easydeal-runtime = {version = '3.0.0', path = '../runtime'}
 
 # octopus
 rand = "0.7.2"
@@ -79,4 +79,4 @@ pallet-octopus-appchain = { git = 'https://github.com/octopus-network/pallet-oct
 
 [features]
 default = []
-runtime-benchmarks = ['appchain-barnacle-runtime/runtime-benchmarks']
+runtime-benchmarks = ['easydeal-runtime/runtime-benchmarks']
