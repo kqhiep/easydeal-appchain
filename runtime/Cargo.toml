@@ -26,6 +26,7 @@ frame-system = {default-features = false, version = '3.0.0', git = 'https://gith
 frame-system-benchmarking = {default-features = false, optional = true, version = '3.0.0', git = 'https://github.com/paritytech/substrate.git', tag = 'monthly-2021-05'}
 frame-system-rpc-runtime-api = {default-features = false, version = '3.0.0', git = 'https://github.com/paritytech/substrate.git', tag = 'monthly-2021-05'}
 pallet-babe = {default-features = false, version = '3.0.0', git = 'https://github.com/paritytech/substrate.git', tag = 'monthly-2021-05'}
+pallet-assets = { version = "3.0.0", default-features = false, git = 'https://github.com/paritytech/substrate.git', tag = 'monthly-2021-05' }
 pallet-balances = {default-features = false, version = '3.0.0', git = 'https://github.com/paritytech/substrate.git', tag = 'monthly-2021-05'}
 pallet-grandpa = {default-features = false, version = '3.0.0', git = 'https://github.com/paritytech/substrate.git', tag = 'monthly-2021-05'}
 pallet-randomness-collective-flip = {default-features = false, version = '3.0.0', git = 'https://github.com/paritytech/substrate.git', tag = 'monthly-2021-05'}
@@ -64,8 +65,7 @@ frame-election-provider-support = { version = "3.0.0", default-features = false,
 beefy-primitives = { git = "https://github.com/octopus-network/grandpa-bridge-gadget", branch = "octopus", default-features = false }
 pallet-beefy = { git = "https://github.com/octopus-network/grandpa-bridge-gadget", branch = "octopus", default-features = false }
 
-pallet-octopus-appchain = { git = 'https://github.com/czl1378/pallet-octopus-appchain.git', default-features = false }
-pallet-assets = { git = 'https://github.com/czl1378/pallet-assets.git', default-features = false }
+pallet-octopus-appchain = { git = 'https://github.com/octopus-network/pallet-octopus-appchain.git', branch = 'master', default-features = false }
 
 [features]
 default = ['std']

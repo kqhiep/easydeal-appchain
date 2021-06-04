@@ -4039,7 +4039,7 @@ dependencies = [
 [[package]]
 name = "pallet-assets"
 version = "3.0.0"
-source = "git+https://github.com/czl1378/pallet-assets.git#8c13548386c39428d6fd4bcc8e20ba16d3e7afce"
+source = "git+https://github.com/octopus-network/substrate.git?branch=master#1d7f6e12c651d776fc0dc1adefd007bb60f60b63"
 dependencies = [
  "frame-benchmarking",
  "frame-support",
@@ -4225,18 +4225,17 @@ dependencies = [
 [[package]]
 name = "pallet-octopus-appchain"
 version = "3.0.0-pre.0"
-source = "git+https://github.com/czl1378/pallet-octopus-appchain.git#ad61f4f5958960b0a0330794c8afa61415c32243"
+source = "git+https://github.com/octopus-network/pallet-octopus-appchain.git?branch=master#4bd7b2cbc026f0ea98b2e37cbd97a2cdcb08d4b0"
 dependencies = [
  "base64 0.13.0",
+ "frame-benchmarking",
  "frame-support",
  "frame-system",
  "hex",
  "lite-json",
  "log",
- "pallet-assets",
  "pallet-session",
  "parity-scale-codec",
- "serde",
  "sp-core",
  "sp-io",
  "sp-runtime",
@@ -9014,13 +9013,3 @@ dependencies = [
  "cc",
  "libc",
 ]
-
-[[patch.unused]]
-name = "pallet-assets"
-version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=master#1d7f6e12c651d776fc0dc1adefd007bb60f60b63"
-
-[[patch.unused]]
-name = "pallet-assets"
-version = "3.0.0"
-source = "git+https://github.com/octopus-network/substrate.git?branch=master#1d7f6e12c651d776fc0dc1adefd007bb60f60b63"
