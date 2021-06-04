@@ -123,7 +123,7 @@ pub mod opaque {
 //   https://substrate.dev/docs/en/knowledgebase/runtime/upgrades#runtime-versioning
 pub const VERSION: RuntimeVersion = RuntimeVersion {
 	spec_name: create_runtime_str!("appchain"),
-	impl_name: create_runtime_str!("node-template"),
+	impl_name: create_runtime_str!("appchain-barnacle"),
 	authoring_version: 1,
 	// The version of the runtime specification. A full node will not attempt to use its native
 	//   runtime in substitute for the on-chain Wasm runtime unless all of `spec_name`,
@@ -131,9 +131,9 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
 	// This value is set to 100 to notify Polkadot-JS App (https://polkadot.js.org/apps) to use
 	//   the compatible custom types.
 	spec_version: 101,
-	impl_version: 2,
+	impl_version: 1,
 	apis: RUNTIME_API_VERSIONS,
-	transaction_version: 2,
+	transaction_version: 1,
 };
 
 /// Since BABE is probabilistic this is the average expected block time that
