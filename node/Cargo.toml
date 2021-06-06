@@ -75,7 +75,7 @@ beefy-primitives = { git = "https://github.com/octopus-network/grandpa-bridge-ga
 beefy-gadget = { git = "https://github.com/octopus-network/grandpa-bridge-gadget", branch = "octopus" }
 beefy-gadget-rpc = { git = "https://github.com/octopus-network/grandpa-bridge-gadget", branch = "octopus" }
 
-pallet-octopus-appchain = { git = 'https://github.com/octopus-network/pallet-octopus-appchain.git', branch = 'master' }
+pallet-octopus-appchain = { git = 'https://github.com/octopus-network/pallet-octopus-appchain.git', rev = '1fa4dbd', default-features = false }
 
 [features]
 default = []
