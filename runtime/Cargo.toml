@@ -49,6 +49,7 @@ sp-version = {default-features = false, version = '3.0.0', git = 'https://github
 # local dependencies
 pallet-info = {default-features = false, path = '../pallets/info'}
 pallet-space = {default-features = false, path = '../pallets/space'}
+pallet-sign = {default-features = false, path = '../pallets/sign'}
 
 # octopus
 log = { version = "0.4.14", default-features = false }

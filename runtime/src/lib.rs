@@ -62,6 +62,7 @@ use frame_election_provider_support::onchain;
 /// Import local pallet.
 pub use pallet_info;
 pub use pallet_space;
+pub use pallet_sign;
 
 /// An index to a block.
 pub type BlockNumber = u32;
@@ -622,6 +623,9 @@ impl pallet_space::Config for Runtime {
 	type Event = Event;
 }
 
+impl pallet_sign::Config for Runtime {
+	type Event = Event;
+}
 // Create the runtime by composing the FRAME pallets that were previously configured.
 construct_runtime!(
 	pub enum Runtime where
@@ -649,6 +653,7 @@ construct_runtime!(
 		// Include the custom logic from the pallet-info in the runtime.
 		Info: pallet_info::{Pallet, Call, Storage, Event<T>},
 		Space: pallet_space::{Pallet, Call, Storage, Event<T>},
+		Sign: pallet_sign::{Pallet, Call, Storage, Event<T>},
 	}
 );
 

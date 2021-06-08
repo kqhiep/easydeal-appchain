@@ -1466,6 +1466,7 @@ dependencies = [
  "pallet-octopus-appchain",
  "pallet-randomness-collective-flip",
  "pallet-session",
+ "pallet-sign",
  "pallet-space",
  "pallet-staking",
  "pallet-staking-reward-curve",
@@ -4272,6 +4273,21 @@ dependencies = [
  "sp-staking",
  "sp-std",
  "sp-trie",
+]
+
+[[package]]
+name = "pallet-sign"
+version = "3.0.0"
+dependencies = [
+ "frame-benchmarking",
+ "frame-support",
+ "frame-system",
+ "parity-scale-codec",
+ "serde",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+ "sp-std",
 ]
 
 [[package]]
