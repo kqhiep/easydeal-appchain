@@ -4,11 +4,12 @@
 /// Learn more about FRAME and the core library of Substrate FRAME pallets:
 /// <https://substrate.dev/docs/en/knowledgebase/runtime/frame>
 use frame_support::RuntimeDebug;
-
 use sp_std::prelude::*;
 
 use codec::{Decode, Encode};
 pub use pallet::*;
+use sp_keyring::sr25519::Keyring::Alice;
+
 
 #[derive(Encode, Decode, Clone, Eq, PartialEq, RuntimeDebug)]
 pub struct Sign<AccountId, BlockNumber> {
@@ -22,7 +23,11 @@ pub struct Sign<AccountId, BlockNumber> {
 
 #[frame_support::pallet]
 pub mod pallet {
-	use frame_support::{dispatch::DispatchResultWithPostInfo, pallet_prelude::*};
+	use frame_support::{
+		dispatch::DispatchResultWithPostInfo,
+		pallet_prelude::*,
+		traits::{Currency, ExistenceRequirement},
+	};
 	use frame_system::pallet_prelude::*;
 
 	use super::*;
@@ -32,31 +37,23 @@ pub mod pallet {
 	pub trait Config: frame_system::Config {
 		/// Because this pallet emits events, it depends on the runtime's definition of an event.
 		type Event: From<Event<Self>> + IsType<<Self as frame_system::Config>::Event>;
+		type Currency: Currency<Self::AccountId>;
+
 	}
 
 	#[pallet::pallet]
 	#[pallet::generate_store(pub(super) trait Store)]
 	pub struct Pallet<T>(_);
 
+	#[pallet::type_value]
+	pub(super) fn DefaultAmount() -> u32 {
+		1u32
+	}
 	#[pallet::storage]
-	pub(crate) type DailyReword<T> = StorageValue<_, u32, ValueQuery>;
+	pub(crate) type DailyRewordAmount<T> = StorageValue<_, u32, ValueQuery, DefaultAmount>;
 
 	#[pallet::storage]
-	pub(crate) type DailyBase<T> = StorageValue<_, u32, ValueQuery>;
-
-	//TODO dont need
-	#[pallet::storage]
-	pub(crate) type TotalCount<T> = StorageValue<_, u32, ValueQuery>;
-
-	//TODO dont need
-	#[pallet::storage]
-	pub(crate) type DailyCount<T> = StorageValue<_, u32, ValueQuery>;
-
-	//TODO dont need
-	#[pallet::storage]
-	pub(crate) type TotalReword<T> = StorageValue<_, u32, ValueQuery>;
-
-	#[pallet::storage]
+	#[pallet::getter(fn fetch_sign_info)]
 	pub(crate) type SignInfo<T: Config> =
 		StorageMap<_, Twox64Concat, T::AccountId, Sign<T::AccountId, T::BlockNumber>>;
 
@@ -79,56 +76,61 @@ pub mod pallet {
 			let who = ensure_signed(origin)?;
 			let block_number = frame_system::Pallet::<T>::block_number();
 
-			// TODO fetch the storage signInfo 
-			let t_count = TotalCount::<T>::get();
-			let total_count = t_count + 1;
-			let d_count = DailyCount::<T>::get();
-			// signing timestamp is less than a day , sum daily_count, otherwise sub
-			let daily_count = d_count + 1;
-			let total_reword = TotalReword::<T>::get();
+			//Fetch the user signInfo
+			let my_sign_info = SignInfo::<T>::get(&who); //Self::fetch_sign_info(&who);
+			log::info!("my_sign_info: {:#?}", my_sign_info);
+			let mut t_count = 0;
+			let mut d_count = 0;
+			let mut t_reword = 0;
+			match my_sign_info {
+				Some(data) => {
+					t_count = data.total_count;
+					d_count = data.daily_count;
+					t_reword = data.total_reword;
 
-			let d_reword = DailyReword::<T>::get();
-			let g_reword_base = DailyBase::<T>::get();
-			//TODO
-			let my_daily_base = g_reword_base + daily_count;
-			let t_reword = total_reword + d_reword * my_daily_base;
+					// log::info!("data: {:#?}", data.total_count);
+				}
+				None => {}
+			}
+
+			let total_count = t_count + 1;
+			let daily_count = d_count + 1;
+			let mut g_reword_base = DailyRewordAmount::<T>::get();
+			let total_reword = t_reword + g_reword_base;
+
 			let sign: Sign<T::AccountId, T::BlockNumber> = Sign {
 				total_count: total_count,
 				daily_count: daily_count,
-				total_reword: t_reword,
+				total_reword: total_reword,
 				// isSigned: true,
 				last_signed_time: total_count, //TODO time
 				creator: who.clone(),
 				block: block_number,
 			};
 
-			TotalCount::<T>::put(total_count);
-			DailyCount::<T>::put(daily_count);
-			TotalReword::<T>::put(total_reword);
+			log::info!("=============who:{:#?}", who);
+			// log::info!("=============alice:{:#?}", Alice.pair());
+			// Send signed reword
+			T::Currency::transfer(
+				&Alice.to_account_id(),
+				&who,
+				g_reword_base,
+				ExistenceRequirement::KeepAlive,
+			)?;
 
 			SignInfo::<T>::insert(who.clone(), sign);
 
 			Ok(().into())
 		}
 
-		#[pallet::weight(10_000 + T::DbWeight::get().writes(1))]
-		pub fn set_daily_reword(origin: OriginFor<T>, amount: u32) -> DispatchResultWithPostInfo {
-			let who = ensure_signed(origin)?;
-			//TODO amount have to bigger than zero
-			// let newAmount = amount > 0
-			TotalCount::<T>::put(amount);
-			Ok(().into())
-
-		}
-
+		//  global set daily reword value
 		#[pallet::weight(10_000 + T::DbWeight::get().writes(1))]
 		pub fn set_daily_base(origin: OriginFor<T>, amount: u32) -> DispatchResultWithPostInfo {
-			let who = ensure_signed(origin)?;
+			ensure_signed(origin)?;
 			//TODO amount have to bigger than zero
 			// let newAmount = amount > 0
-			DailyBase::<T>::put(amount);
+			DailyRewordAmount::<T>::put(amount);
 			Ok(().into())
-
 		}
 	}
 }
