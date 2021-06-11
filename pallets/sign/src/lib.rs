@@ -4,12 +4,11 @@
 /// Learn more about FRAME and the core library of Substrate FRAME pallets:
 /// <https://substrate.dev/docs/en/knowledgebase/runtime/frame>
 use frame_support::RuntimeDebug;
+
 use sp_std::prelude::*;
 
 use codec::{Decode, Encode};
 pub use pallet::*;
-use sp_keyring::sr25519::Keyring::Alice;
-
 
 #[derive(Encode, Decode, Clone, Eq, PartialEq, RuntimeDebug)]
 pub struct Sign<AccountId, BlockNumber> {
@@ -24,22 +23,35 @@ pub struct Sign<AccountId, BlockNumber> {
 #[frame_support::pallet]
 pub mod pallet {
 	use frame_support::{
-		dispatch::DispatchResultWithPostInfo,
+		dispatch::DispatchResultWithPostInfo, PalletId,
 		pallet_prelude::*,
-		traits::{Currency, ExistenceRequirement},
+		sp_runtime::traits::AccountIdConversion,
+		traits::{Currency, ExistenceRequirement, Get},
 	};
 	use frame_system::pallet_prelude::*;
-
+	
 	use super::*;
 
 	/// Configure the pallet by specifying the parameters and types on which it depends.
 	#[pallet::config]
 	pub trait Config: frame_system::Config {
+		#[pallet::constant]
+		type PalletId: Get<PalletId>;
+
 		/// Because this pallet emits events, it depends on the runtime's definition of an event.
 		type Event: From<Event<Self>> + IsType<<Self as frame_system::Config>::Event>;
 		type Currency: Currency<Self::AccountId>;
-
+		
 	}
+
+	#[pallet::extra_constants]
+    impl<T: Config> Pallet<T> {
+        /// Returns the accountID for the treasury balance
+        /// Transferring balance to this account funds the treasury
+        pub fn account_id() -> T::AccountId {
+            T::PalletId::get().into_account()
+        }
+    }
 
 	#[pallet::pallet]
 	#[pallet::generate_store(pub(super) trait Store)]
@@ -47,7 +59,7 @@ pub mod pallet {
 
 	#[pallet::type_value]
 	pub(super) fn DefaultAmount() -> u32 {
-		1u32
+		1000_000_000u32
 	}
 	#[pallet::storage]
 	pub(crate) type DailyRewordAmount<T> = StorageValue<_, u32, ValueQuery, DefaultAmount>;
@@ -56,6 +68,21 @@ pub mod pallet {
 	#[pallet::getter(fn fetch_sign_info)]
 	pub(crate) type SignInfo<T: Config> =
 		StorageMap<_, Twox64Concat, T::AccountId, Sign<T::AccountId, T::BlockNumber>>;
+
+	// #[pallet::genesis_config]
+	// #[derive(Default)]
+	// pub struct GenesisConfig;
+
+	// #[pallet::genesis_build]
+	// impl<T: Config> GenesisBuild<T> for GenesisConfig {
+	// 	fn build(&self) {
+	// 		let account_id = T::account_id();
+	// 		let min = T::Currency::minimum_balance() * 5000_000_000.into();
+	// 		if T::Currency::free_balance(&account_id) < min {
+	// 			let _ = T::Currency::make_free_balance_be(&account_id, min);
+	// 		}
+	// 	}
+	// }
 
 	#[pallet::event]
 	#[pallet::metadata(T::AccountId = "AccountId")]
@@ -71,6 +98,7 @@ pub mod pallet {
 
 	#[pallet::call]
 	impl<T: Config> Pallet<T> {
+		
 		#[pallet::weight(10_000 + T::DbWeight::get().writes(1))]
 		pub fn do_sign(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 			let who = ensure_signed(origin)?;
@@ -95,7 +123,7 @@ pub mod pallet {
 
 			let total_count = t_count + 1;
 			let daily_count = d_count + 1;
-			let mut g_reword_base = DailyRewordAmount::<T>::get();
+			let g_reword_base = DailyRewordAmount::<T>::get();
 			let total_reword = t_reword + g_reword_base;
 
 			let sign: Sign<T::AccountId, T::BlockNumber> = Sign {
@@ -111,10 +139,11 @@ pub mod pallet {
 			log::info!("=============who:{:#?}", who);
 			// log::info!("=============alice:{:#?}", Alice.pair());
 			// Send signed reword
+
 			T::Currency::transfer(
-				&Alice.to_account_id(),
+				&Self::account_id(),
 				&who,
-				g_reword_base,
+				g_reword_base.into(),
 				ExistenceRequirement::KeepAlive,
 			)?;
 

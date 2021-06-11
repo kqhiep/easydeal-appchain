@@ -29,7 +29,7 @@ pub use pallet_timestamp::Call as TimestampCall;
 pub use pallet_balances::Call as BalancesCall;
 pub use sp_runtime::{Permill, Perbill};
 pub use frame_support::{
-	construct_runtime, parameter_types, StorageValue,
+	construct_runtime, parameter_types, StorageValue, PalletId,
 	traits::{KeyOwnerProofSystem, Randomness},
 	weights::{
 		Weight, IdentityFee,
@@ -623,8 +623,14 @@ impl pallet_space::Config for Runtime {
 	type Event = Event;
 }
 
+parameter_types! {
+	pub const SignPalletId: PalletId = PalletId(*b"py/signp");
+}
+
 impl pallet_sign::Config for Runtime {
+	type PalletId = SignPalletId;
 	type Event = Event;
+	type Currency = Balances;
 }
 // Create the runtime by composing the FRAME pallets that were previously configured.
 construct_runtime!(
