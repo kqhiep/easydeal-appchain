@@ -131,8 +131,8 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
 	//   `spec_version`, and `authoring_version` are the same between Wasm and native.
 	// This value is set to 100 to notify Polkadot-JS App (https://polkadot.js.org/apps) to use
 	//   the compatible custom types.
-	spec_version: 101,
-	impl_version: 1,
+	spec_version: 105,
+	impl_version: 2,
 	apis: RUNTIME_API_VERSIONS,
 	transaction_version: 1,
 };
@@ -605,7 +605,7 @@ impl pallet_octopus_appchain::Config for Runtime {
 	type Assets = Assets;
 	type GracePeriod = GracePeriod;
 	type UnsignedPriority = UnsignedPriority;
-	const RELAY_CONTRACT: &'static [u8] = b"oct-relay.testnet";
+	const RELAY_CONTRACT: &'static [u8] = b"octopus-relay.testnet";
 }
 
 impl pallet_sudo::Config for Runtime {
