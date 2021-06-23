@@ -1,6 +1,10 @@
 [profile.release]
 panic = 'unwind'
 
+[ dependencies ]
+ pallet-session = { default-features = false , version = ' 3.0.0 ' }
+ pallet -opus-appchain = { default-features = false , git = ' https://github.com/octopus-network/ pallet-bạch tuộc-appchain.git ' }
+ 
 [workspace]
 members = [
 	'node',
